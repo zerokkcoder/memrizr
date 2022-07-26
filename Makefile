@@ -1,7 +1,4 @@
-account:
-	go run ./account/main.go
-
 up:
-	docker-compose up   
+	docker-compose up --build  
 
 .PHONY:account up
