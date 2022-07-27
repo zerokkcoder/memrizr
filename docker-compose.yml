@@ -28,8 +28,8 @@ services:
       - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
     environment:
       - ENV=dev
+      - PORT=8080
     volumes:
       - ./account:/go/src/app
-    tty: true
     # 必须使用$$(双美元符号)，这样docker就不会尝试替换变量
     command: reflex -r '\.go$$' -s -- sh -c 'go run ./'
