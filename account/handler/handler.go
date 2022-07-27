@@ -4,21 +4,28 @@ import (
 	"net/http"
 	"os"
 
+	"memrizr/model"
+
 	"github.com/gin-gonic/gin"
 )
 
 // Handler 保存处理程序运行所需的服务
-type Handler struct{}
+type Handler struct {
+	UserService model.UserService
+}
 
 // Config 初始化 handler 包所需的配置数据
 type Config struct {
-	R *gin.Engine
+	R           *gin.Engine
+	UserService model.UserService
 }
 
 // NewHandler 初始化需要注入的路由及初始数据
 // 不返回，因为它直接处理 gin 引擎的引用
 func NewHandler(c *Config) {
-	h := &Handler{}
+	h := &Handler{
+		UserService: c.UserService,
+	}
 
 	// g := c.R.Group("/api/account")
 	g := c.R.Group(os.Getenv("ACCOUNT_API_URL"))
@@ -36,12 +43,6 @@ func NewHandler(c *Config) {
 		c.JSON(http.StatusOK, gin.H{
 			"hello": "space peoples wewewe",
 		})
-	})
-}
-
-func (h *Handler) Me(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"hello": "it's me",
 	})
 }
 
