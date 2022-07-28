@@ -51,3 +51,4 @@ $ make migrate-force VERSION=number
 - [09-Token 生成](https://dev.to/jacobsngoodwin/09-token-creation-gjh)
 - [10-依赖注入及应用演示](https://dev.to/jacobsngoodwin/10-dependency-injection-and-app-demo-1pj5)
 - [11-Account API清理和修复](https://dev.to/jacobsngoodwin/11-cleanup-fixes-2b18)
+- [12-Redis 保存 RefreshToken](https://dev.to/jacobsngoodwin/12-store-refresh-tokens-in-redis-1k5d)

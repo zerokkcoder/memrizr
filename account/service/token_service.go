@@ -10,6 +10,7 @@ import (
 
 // TokenService Token服务层
 type tokenService struct {
+	TokenRepository       model.TokenRepository
 	PrivateKey            *rsa.PrivateKey
 	PublicKey             *rsa.PublicKey
 	RefreshSecret         string
@@ -19,6 +20,7 @@ type tokenService struct {
 
 // TSConfig Token服务层配置结构体
 type TSConfig struct {
+	TokenRepository       model.TokenRepository
 	PrivateKey            *rsa.PrivateKey
 	PublicKey             *rsa.PublicKey
 	RefreshSecret         string
@@ -29,6 +31,7 @@ type TSConfig struct {
 // NewTokenService 实例化TokenService
 func NewTokenService(c *TSConfig) model.TokenService {
 	return &tokenService{
+		TokenRepository:       c.TokenRepository,
 		PrivateKey:            c.PrivateKey,
 		PublicKey:             c.PublicKey,
 		RefreshSecret:         c.RefreshSecret,
@@ -51,7 +54,17 @@ func (s *tokenService) NewTokenPairFromUser(ctx context.Context, u *model.User, 
 		return nil, apperrors.NewInternal()
 	}
 
-	// TODO 保存 refresh token
+	// 保存 refresh token
+	if err := s.TokenRepository.SetRefreshToken(ctx, u.UID.String(), refreshToken.ID, refreshToken.ExpiresIn); err != nil {
+		log.Printf("Error storing tokenID for uid: %v. Error: %v\n", u.UID, err.Error())
+		return nil, apperrors.NewInternal()
+	}
+
+	if prevIDToken != "" {
+		if err := s.TokenRepository.DeleteRefreshToken(ctx, u.UID.String(), prevIDToken); err != nil {
+			log.Printf("could not delete previous refreshToken for uid: %v, tokenID: %v\n", u.UID.String(), prevIDToken)
+		}
+	}
 
 	return &model.TokenPair{
 		IDToken:      idToken,
