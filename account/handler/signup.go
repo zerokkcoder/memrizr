@@ -39,7 +39,18 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
+	// 创建 token pair 并转化为字符串
+	tokens, err := h.TokenService.NewTokenPairFromUser(c, u, "")
+
+	if err != nil {
+		log.Printf("Faild to create tokens for user: %v\n", err.Error())
+
+		c.JSON(apperrors.Status(err), gin.H{
+			"error": err,
+		})
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"hello": "it's me",
+		"tokens": tokens,
 	})
 }

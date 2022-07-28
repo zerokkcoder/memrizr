@@ -21,3 +21,5 @@ make up
 - [03-应用架构](https://dev.to/jacobsngoodwin/03-application-architecture-5jk)
 - [04-使用 Testify Mock 测试 Gin HTTP 处理器](https://dev.to/jacobsngoodwin/04-testing-first-gin-http-handler-9m0)
 - [05-测试GO Account应用服务层方法](https://dev.to/jacobsngoodwin/05-testing-a-service-layer-method-in-go-account-application-13a6)
+- [06-使用 gin 创建注册处理器 - 绑定数据](https://dev.to/jacobsngoodwin/creating-signup-handler-in-gin-binding-data-3kb5)
+- [07-使用 gin 创建注册处理器 - 生成Token](https://dev.to/jacobsngoodwin/07-completing-signup-handler-in-gin-token-creation-1ikc)

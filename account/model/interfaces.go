@@ -16,3 +16,8 @@ type UserService interface {
 type UserRepository interface {
 	FindByID(ctx context.Context, uid uuid.UUID) (*User, error)
 }
+
+// TokenService Token服务接口
+type TokenService interface {
+	NewTokenPairFromUser(ctx context.Context, u *User, prevIDToken string) (*TokenPair, error)
+}
