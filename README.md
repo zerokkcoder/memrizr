@@ -4,6 +4,10 @@
 ## 使用到的库
 - `go get -u github.com/gin-gonic/gin` http服务器及理路由
 - `go get github.com/cespare/reflex` 是应用程序进行实时重新加载
+- `go get github.com/stretchr/testify` 测试包
+- `go get github.com/google/uuid` 创建 uuid 包
+
+
 
 ## 命令列表
 启动 `docker-compose`:

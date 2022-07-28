@@ -24,9 +24,12 @@ func NewUserService(c *USConfig) model.UserService {
 	}
 }
 
-// Get 实现 UserService 接口 Get方法
+// Get 实现 UserService 接口 Get 方法
 func (s *UserService) Get(ctx context.Context, uid uuid.UUID) (*model.User, error) {
 	return s.UserRepository.FindByID(ctx, uid)
 }
 
-
+// Signup 实现 UserService 接口 Signup 方法
+func (s *UserService) Signup(ctx context.Context, u *model.User) error {
+	panic("Method not implemented")
+}
