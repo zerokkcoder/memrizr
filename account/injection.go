@@ -8,6 +8,7 @@ import (
 	"memrizr/repository"
 	"memrizr/service"
 	"os"
+	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -52,19 +53,38 @@ func inject(d *dataSources) (*gin.Engine, error) {
 	// 从 env 中加载 refresh token secret
 	refreshSecret := os.Getenv("REFRESH_SECRET")
 
+	// 从 env 中获取 过期时间设置
+	idTokenExp := os.Getenv("ID_TOKEN_EXP")
+	refreshTokenExp := os.Getenv("REFRESH_TOKEN_EXP")
+
+	idExp, err := strconv.ParseInt(idTokenExp, 0, 64)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse ID_TOKEN_EXP as int: %w", err)
+	}
+
+	refreshExp, err := strconv.ParseInt(refreshTokenExp, 0, 64)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse REFRESH_TOKEN_EXP as int: %w", err)
+	}
+
 	tokenService := service.NewTokenService(&service.TSConfig{
-		PrivateKey:    privKey,
-		PublicKey:     pubKey,
-		RefreshSecret: refreshSecret,
+		PrivateKey:            privKey,
+		PublicKey:             pubKey,
+		RefreshSecret:         refreshSecret,
+		IDExpirationSecs:      idExp,
+		RefreshExpirationSecs: refreshExp,
 	})
 
 	// 路由器
 	router := gin.Default()
 
+	baseURL := os.Getenv("ACCOUNT_API_URL")
+
 	handler.NewHandler(&handler.Config{
 		R:            router,
 		UserService:  userService,
 		TokenService: tokenService,
+		BaseURL:      baseURL,
 	})
 
 	return router, nil

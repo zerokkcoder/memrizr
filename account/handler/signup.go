@@ -29,7 +29,8 @@ func (h *Handler) Signup(c *gin.Context) {
 		Password: req.Password,
 	}
 
-	err := h.UserService.Signup(c, u)
+	ctx := c.Request.Context()
+	err := h.UserService.Signup(ctx, u)
 
 	if err != nil {
 		log.Printf("Faild to sign up user: %v\n", err.Error())
@@ -40,7 +41,7 @@ func (h *Handler) Signup(c *gin.Context) {
 	}
 
 	// 创建 token pair 并转化为字符串
-	tokens, err := h.TokenService.NewTokenPairFromUser(c, u, "")
+	tokens, err := h.TokenService.NewTokenPairFromUser(ctx, u, "")
 
 	if err != nil {
 		log.Printf("Faild to create tokens for user: %v\n", err.Error())

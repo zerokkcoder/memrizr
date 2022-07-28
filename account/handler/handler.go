@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"os"
 
 	"memrizr/model"
 
@@ -20,6 +19,7 @@ type Config struct {
 	R            *gin.Engine
 	UserService  model.UserService
 	TokenService model.TokenService
+	BaseURL      string
 }
 
 // NewHandler 初始化需要注入的路由及初始数据
@@ -31,7 +31,7 @@ func NewHandler(c *Config) {
 	}
 
 	// g := c.R.Group("/api/account")
-	g := c.R.Group(os.Getenv("ACCOUNT_API_URL"))
+	g := c.R.Group(c.BaseURL)
 
 	g.GET("/me", h.Me)
 	g.POST("/signup", h.Signup)
@@ -60,8 +60,6 @@ func (h *Handler) Signout(c *gin.Context) {
 		"hello": "it's me",
 	})
 }
-
-
 
 // Image handler
 func (h *Handler) Image(c *gin.Context) {

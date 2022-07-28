@@ -17,9 +17,9 @@ type IDTokenCustomClaims struct {
 }
 
 // 生成 token
-func generateIDToken(u *model.User, key *rsa.PrivateKey) (string, error) {
+func generateIDToken(u *model.User, key *rsa.PrivateKey, exp int64) (string, error) {
 	unixTime := time.Now().Unix()
-	tokenExp := unixTime + 60*15 // 15分钟过期实践
+	tokenExp := unixTime + exp
 
 	claims := IDTokenCustomClaims{
 		User: u,
@@ -53,9 +53,9 @@ type RefreshTokenCustomClaims struct {
 }
 
 // 生成刷新token
-func generateRefreshToken(uid uuid.UUID, key string) (*RefreshToken, error) {
+func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*RefreshToken, error) {
 	currentTime := time.Now()
-	tokenExp := currentTime.AddDate(0, 0, 3) // 3天过期时间
+	tokenExp := currentTime.Add(time.Duration(exp) * time.Second)
 	tokenID, err := uuid.NewRandom()
 
 	if err != nil {

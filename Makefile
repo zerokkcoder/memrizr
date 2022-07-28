@@ -1,8 +1,12 @@
 up:
 	docker-compose up --build -d
-	
+
 down:
 	docker-compose down
+
+test:
+	cd account && \
+	go test -v ./...
 
 postgres:
 	docker-compose up postgres-account

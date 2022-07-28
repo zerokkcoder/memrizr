@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"memrizr/model/apperrors"
 
@@ -18,6 +19,18 @@ type invalidArgument struct {
 
 // bindData 帮助函数，如果数据没有绑定返回 false
 func bindData(c *gin.Context, req interface{}) bool {
+	if c.ContentType() != "application/json" {
+		msg := fmt.Sprintf("%s noly accepts Content-Type application/json", c.FullPath())
+
+		err := apperrors.NewUnsupportedMediaType(msg)
+
+		c.JSON(err.Status(), gin.H{
+			"error": err,
+		})
+
+		return false
+	}
+
 	// 绑定 输入的 json 数据到 结构体上，并检查验证错误
 	if err := c.ShouldBind(req); err != nil {
 		log.Printf("Error binding data: %+v\n", err)

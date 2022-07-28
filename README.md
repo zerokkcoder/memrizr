@@ -50,3 +50,4 @@ $ make migrate-force VERSION=number
 - [08-实现注册的服务层和存储层](https://dev.to/jacobsngoodwin/08-implement-signup-in-service-and-repository-layers-4coe)
 - [09-Token 生成](https://dev.to/jacobsngoodwin/09-token-creation-gjh)
 - [10-依赖注入及应用演示](https://dev.to/jacobsngoodwin/10-dependency-injection-and-app-demo-1pj5)
+- [11-Account API清理和修复](https://dev.to/jacobsngoodwin/11-cleanup-fixes-2b18)

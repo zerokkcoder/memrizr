@@ -12,19 +12,19 @@ import (
 )
 
 // PGUserRepository 用户存储层实现
-type PGUserRepository struct {
+type pgUserRepository struct {
 	DB *sqlx.DB
 }
 
 // NewUserRepository 实例化PGUserRepository
 func NewUserRepository(db *sqlx.DB) model.UserRepository {
-	return &PGUserRepository{
+	return &pgUserRepository{
 		DB: db,
 	}
 }
 
 // FindByID 通过 ID 查找用户
-func (r *PGUserRepository) FindByID(ctx context.Context, uid uuid.UUID) (*model.User, error) {
+func (r *pgUserRepository) FindByID(ctx context.Context, uid uuid.UUID) (*model.User, error) {
 	user := &model.User{}
 
 	query := "SELECT * FROM users WHERE uid=$1"
@@ -37,10 +37,10 @@ func (r *PGUserRepository) FindByID(ctx context.Context, uid uuid.UUID) (*model.
 }
 
 // Create 创建用户
-func (r *PGUserRepository) Create(ctx context.Context, u *model.User) error {
+func (r *pgUserRepository) Create(ctx context.Context, u *model.User) error {
 	query := "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *"
 
-	if err := r.DB.Get(u, query, u.Email, u.Password); err != nil {
+	if err := r.DB.GetContext(ctx, u, query, u.Email, u.Password); err != nil {
 		// 检验 唯一
 		if err, ok := err.(*pq.Error); ok && err.Code.Name() == "unique_violation" {
 			log.Printf("Could not create a user with email: %v. Reason: %v\n", u.Email, err.Code.Name())

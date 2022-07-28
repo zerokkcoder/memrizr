@@ -11,12 +11,13 @@ type Type string
 
 // 定义错误类型
 const (
-	Authorization   Type = "AUTHORIZATION"   // Authentication Failures -
-	BadRequest      Type = "BADREQUEST"      // Validation errors / BadInput
-	Conflict        Type = "CONFLICT"        // Already exists (eg, create account with existent email) - 409
-	Internal        Type = "INTERNAL"        // Server (500) and fallback errors
-	NotFound        Type = "NOTFOUND"        // For not finding resource
-	PayloadTooLarge Type = "PAYLOADTOOLARGE" // for uploading tons of JSON, or an image over the limit - 413
+	Authorization        Type = "AUTHORIZATION"        // Authentication Failures -
+	BadRequest           Type = "BADREQUEST"           // Validation errors / BadInput
+	Conflict             Type = "CONFLICT"             // Already exists (eg, create account with existent email) - 409
+	Internal             Type = "INTERNAL"             // Server (500) and fallback errors
+	NotFound             Type = "NOTFOUND"             // For not finding resource
+	PayloadTooLarge      Type = "PAYLOADTOOLARGE"      // for uploading tons of JSON, or an image over the limit - 413
+	UnsupportedMediaType Type = "UNSUPPORTEDMEDIATYPE" // for http 415
 )
 
 // Error 应用程序的自定义错误
@@ -47,6 +48,8 @@ func (e *Error) Status() int {
 		return http.StatusNotFound
 	case PayloadTooLarge:
 		return http.StatusRequestEntityTooLarge
+	case UnsupportedMediaType:
+		return http.StatusUnsupportedMediaType
 	default:
 		return http.StatusInternalServerError
 	}
@@ -109,5 +112,13 @@ func NewPayloadTooLarge(maxBodySize int64, contentLength int64) *Error {
 	return &Error{
 		Type:    PayloadTooLarge,
 		Message: fmt.Sprintf("Max payload size of %v exceeded. Actual payload size: %v", maxBodySize, contentLength),
+	}
+}
+
+// NewUnsupportedMediaType 创建 415 error
+func NewUnsupportedMediaType(reason string) *Error {
+	return &Error{
+		Type:    UnsupportedMediaType,
+		Message: reason,
 	}
 }

@@ -22,7 +22,7 @@ func TestSignup(t *testing.T) {
 	// 测试没有邮箱和密码
 	t.Run("Email and Password Required", func(t *testing.T) {
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), mock.AnythingOfType("*model.User")).Return(nil)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).Return(nil)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -50,13 +50,13 @@ func TestSignup(t *testing.T) {
 		router.ServeHTTP(rr, request)
 
 		assert.Equal(t, 400, rr.Code)
-		mockUserService.AssertNotCalled(t, "signup")
+		mockUserService.AssertNotCalled(t, "Signup")
 	})
 
 	// 无效邮箱测试用例
 	t.Run("Invalid Email", func(t *testing.T) {
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), mock.AnythingOfType("*model.User")).Return(nil)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).Return(nil)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -91,7 +91,7 @@ func TestSignup(t *testing.T) {
 	// 密码太短测试用例
 	t.Run("Password too short", func(t *testing.T) {
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), mock.AnythingOfType("*model.User")).Return(nil)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).Return(nil)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -126,7 +126,7 @@ func TestSignup(t *testing.T) {
 	// 密码太长测试用例
 	t.Run("Password too long", func(t *testing.T) {
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), mock.AnythingOfType("*model.User")).Return(nil)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).Return(nil)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -166,7 +166,7 @@ func TestSignup(t *testing.T) {
 		}
 
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), u).Return(apperrors.NewConflict("User Already Exists", u.Email))
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).Return(apperrors.NewConflict("User Already Exists", u.Email))
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -194,7 +194,7 @@ func TestSignup(t *testing.T) {
 
 		router.ServeHTTP(rr, request)
 
-		assert.Equal(t, 500, rr.Code)
+		assert.Equal(t, 409, rr.Code)
 		mockUserService.AssertNotCalled(t, "signup")
 	})
 
@@ -212,8 +212,8 @@ func TestSignup(t *testing.T) {
 
 		mockUserService := new(mocks.MockUserService)
 		mockTokenService := new(mocks.MockTokenSerive)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), u).Return(nil)
-		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*gin.Context"), u, "").Return(mockTokenResp, nil)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).Return(nil)
+		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*context.emptyCtx"), u, "").Return(mockTokenResp, nil)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()
@@ -265,8 +265,8 @@ func TestSignup(t *testing.T) {
 
 		mockUserService := new(mocks.MockUserService)
 		mockTokenService := new(mocks.MockTokenSerive)
-		mockUserService.On("Signup", mock.AnythingOfType("*gin.Context"), u).Return(nil)
-		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*gin.Context"), u, "").Return(nil, mockErrorResponse)
+		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).Return(nil)
+		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*context.emptyCtx"), u, "").Return(nil, mockErrorResponse)
 
 		// ResponseRecorder 获取 http 响应
 		rr := httptest.NewRecorder()

@@ -34,7 +34,7 @@ func TestMe(t *testing.T) {
 		}
 
 		mockUserService := new(mocks.MockUserService)
-		mockUserService.On("Get", mock.AnythingOfType("*gin.Context"), uid).Return(mockUserResp, nil)
+		mockUserService.On("Get", mock.AnythingOfType("*context.emptyCtx"), uid).Return(mockUserResp, nil)
 
 		// a response recorder for getting written http response
 		rr := httptest.NewRecorder()
@@ -89,7 +89,7 @@ func TestMe(t *testing.T) {
 
 		router.ServeHTTP(rr, request)
 
-		assert.Equal(t, 500, rr.Code)
+		assert.Equal(t, http.StatusInternalServerError, rr.Code)
 		mockUserService.AssertNotCalled(t, "Get", mock.Anything)
 	})
 
