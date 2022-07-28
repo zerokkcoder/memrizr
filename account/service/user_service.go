@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"log"
 	"memrizr/model"
+	"memrizr/model/apperrors"
 
 	"github.com/google/uuid"
 )
@@ -31,5 +33,16 @@ func (s *UserService) Get(ctx context.Context, uid uuid.UUID) (*model.User, erro
 
 // Signup 实现 UserService 接口 Signup 方法
 func (s *UserService) Signup(ctx context.Context, u *model.User) error {
-	panic("Method not implemented")
+	pw, err := hashPassword(u.Password)
+	if err != nil {
+		log.Printf("Unable to signup user for email: %v\n", u.Email)
+		return apperrors.NewInternal()
+	}
+
+	u.Password = pw
+	if err := s.UserRepository.Create(ctx, u); err != nil {
+		return err
+	}
+
+	return nil
 }

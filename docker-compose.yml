@@ -16,6 +16,18 @@ services:
     volumes:
       # 以便Traekit能够监听Docker事件
       - /var/run/docker.sock:/var/run/docker.sock
+  postgres-auth:
+    image: "postgres:alpine"
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    #   Set a volume for data and initial sql script
+    #   May configure initial db for future demo
+    volumes:
+      - "pgdata_auth:/var/lib/postgresql/data"
+    # - ./init:/docker-entrypoint-initdb.d/
+    command: [ "postgres", "-c", "log_statement=all" ]
   account:
     build:
       context: ./account
@@ -28,10 +40,11 @@ services:
       - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
     environment:
       - ENV=dev
-      - PORT=8080
     volumes:
-      - ./account:/go/src/app
-    env_file:
-      - .env.dev
-    # 必须使用$$(双美元符号)，这样docker就不会尝试替换变量
-    command: reflex -r '\.go$$' -s -- sh -c 'go run ./'
+      - ./auth:/go/src/app
+    depends_on:
+      - postgres-auth
+volumes:
+  pgdata_auth:
+
+
