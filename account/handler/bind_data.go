@@ -20,7 +20,7 @@ type invalidArgument struct {
 func bindData(c *gin.Context, req interface{}) bool {
 	// 绑定 输入的 json 数据到 结构体上，并检查验证错误
 	if err := c.ShouldBind(req); err != nil {
-		log.Printf("Error binding data:%+v\n", err)
+		log.Printf("Error binding data: %+v\n", err)
 
 		if errs, ok := err.(validator.ValidationErrors); ok {
 			var invalidArgs []invalidArgument
@@ -33,18 +33,16 @@ func bindData(c *gin.Context, req interface{}) bool {
 					err.Param(),
 				})
 			}
-
 			err := apperrors.NewBadRequest("Invalid request parameters. See invalidArgs")
 
 			c.JSON(err.Status(), gin.H{
 				"error":       err,
 				"invalidArgs": invalidArgs,
 			})
-
 			return false
 		}
-
 		fallBack := apperrors.NewInternal()
+
 		c.JSON(fallBack.Status(), gin.H{"error": fallBack})
 		return false
 	}

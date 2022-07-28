@@ -18,9 +18,25 @@ $ make up
 ```
 $ make down
 ```
-$ 生成公私密钥文件：
+生成公私密钥文件：
 ```
-create-keypair
+$ create-keypair
+```
+创建迁移文件(需安装 `migrate`)：
+```
+$ make migrate-down
+```
+迁移表:
+```
+$ make migtate-up [N=number]
+```
+删除表:
+```
+$ make migtate-up [N=number]
+```
+强制迁移:
+```
+$ make migrate-force VERSION=number
 ```
 
 ## 图文教程列表

@@ -32,7 +32,7 @@ func (h *Handler) Signup(c *gin.Context) {
 	err := h.UserService.Signup(c, u)
 
 	if err != nil {
-		log.Panicf("Faild to sign up user: %v\n", err.Error())
+		log.Printf("Faild to sign up user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})

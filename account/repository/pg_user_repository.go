@@ -38,7 +38,7 @@ func (r *PGUserRepository) FindByID(ctx context.Context, uid uuid.UUID) (*model.
 
 // Create 创建用户
 func (r *PGUserRepository) Create(ctx context.Context, u *model.User) error {
-	query := "INSERT INTO users (email, password) VALUES ($1, $2) RETURN *"
+	query := "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *"
 
 	if err := r.DB.Get(u, query, u.Email, u.Password); err != nil {
 		// 检验 唯一
@@ -47,7 +47,7 @@ func (r *PGUserRepository) Create(ctx context.Context, u *model.User) error {
 			return apperrors.NewConflict("email", u.Email)
 		}
 
-		log.Printf("Could not create a user with email: %v. Reason: %v\n", u.Email, err.Code.Name())
+		log.Printf("Could not create a user with email: %v. Reason: %v\n", u.Email, err)
 		return apperrors.NewInternal()
 	}
 
