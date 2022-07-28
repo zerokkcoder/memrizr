@@ -12,7 +12,15 @@
 ## 命令列表
 启动 `docker-compose`:
 ```
-make up
+$ make up
+```
+停止 `docker-compose`:
+```
+$ make down
+```
+$ 生成公私密钥文件：
+```
+create-keypair
 ```
 
 ## 图文教程列表
@@ -25,3 +33,4 @@ make up
 - [07-使用 gin 创建注册处理器 - 生成Token](https://dev.to/jacobsngoodwin/07-completing-signup-handler-in-gin-token-creation-1ikc)
 - [08-实现注册的服务层和存储层](https://dev.to/jacobsngoodwin/08-implement-signup-in-service-and-repository-layers-4coe)
 - [09-Token 生成](https://dev.to/jacobsngoodwin/09-token-creation-gjh)
+- [10-依赖注入及应用演示](https://dev.to/jacobsngoodwin/10-dependency-injection-and-app-demo-1pj5)
