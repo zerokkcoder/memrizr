@@ -1,3 +1,4 @@
 .vscode
 account/tmp
 .env.dev
+*.pem

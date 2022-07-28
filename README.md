@@ -24,3 +24,4 @@ make up
 - [06-使用 gin 创建注册处理器 - 绑定数据](https://dev.to/jacobsngoodwin/creating-signup-handler-in-gin-binding-data-3kb5)
 - [07-使用 gin 创建注册处理器 - 生成Token](https://dev.to/jacobsngoodwin/07-completing-signup-handler-in-gin-token-creation-1ikc)
 - [08-实现注册的服务层和存储层](https://dev.to/jacobsngoodwin/08-implement-signup-in-service-and-repository-layers-4coe)
+- [09-Token 生成](https://dev.to/jacobsngoodwin/09-token-creation-gjh)
