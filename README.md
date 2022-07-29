@@ -48,3 +48,4 @@ $ make migrate-force VERSION=number
 - [14-添加 Signin 登录路由处理器](https://dev.to/jacobsngoodwin/14-add-signin-handler-32be)
 - [15-服务层、存储层实现 Signin](https://dev.to/jacobsngoodwin/15-add-signin-to-service-and-repository-layers-5mg)
 - [16-创建获取授权用户中间件](https://dev.to/jacobsngoodwin/16-create-gin-middleware-to-extract-authorized-user-1jom)
+- [17-34 下来都只有视频，视频来自B站](https://www.bilibili.com/video/BV11b4y1X7XU?p=17&vd_source=c7be2b1a82eb3c83399a035d5d4ab118)
