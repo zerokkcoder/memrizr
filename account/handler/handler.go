@@ -2,8 +2,11 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
+	"memrizr/handler/middleware"
 	"memrizr/model"
+	"memrizr/model/apperrors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,10 +19,11 @@ type Handler struct {
 
 // Config 初始化 handler 包所需的配置数据
 type Config struct {
-	R            *gin.Engine
-	UserService  model.UserService
-	TokenService model.TokenService
-	BaseURL      string
+	R               *gin.Engine
+	UserService     model.UserService
+	TokenService    model.TokenService
+	BaseURL         string
+	TimeoutDuration time.Duration
 }
 
 // NewHandler 初始化需要注入的路由及初始数据
@@ -32,6 +36,10 @@ func NewHandler(c *Config) {
 
 	// g := c.R.Group("/api/account")
 	g := c.R.Group(c.BaseURL)
+
+	if gin.Mode() != gin.TestMode {
+		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
+	}
 
 	g.GET("/me", h.Me)
 	g.POST("/signup", h.Signup)
@@ -50,6 +58,7 @@ func NewHandler(c *Config) {
 }
 
 func (h *Handler) Signin(c *gin.Context) {
+	time.Sleep(2 * time.Second)
 	c.JSON(http.StatusOK, gin.H{
 		"hello": "it's me",
 	})

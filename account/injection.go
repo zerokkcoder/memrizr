@@ -9,6 +9,7 @@ import (
 	"memrizr/service"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -82,11 +83,19 @@ func inject(d *dataSources) (*gin.Engine, error) {
 
 	baseURL := os.Getenv("ACCOUNT_API_URL")
 
+	// 读取超时设置的时间
+	handlerTimeout := os.Getenv("HANDLER_TIMEOUT")
+	ht, err := strconv.ParseInt(handlerTimeout, 0, 64)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse HANDLER_TIMEOUT as int: %w", err)
+	}
+
 	handler.NewHandler(&handler.Config{
-		R:            router,
-		UserService:  userService,
-		TokenService: tokenService,
-		BaseURL:      baseURL,
+		R:               router,
+		UserService:     userService,
+		TokenService:    tokenService,
+		BaseURL:         baseURL,
+		TimeoutDuration: time.Duration(time.Duration(ht) * time.Second),
 	})
 
 	return router, nil
