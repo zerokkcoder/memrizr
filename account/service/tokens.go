@@ -111,3 +111,28 @@ func validateIDToken(tokenString string, key *rsa.PublicKey) (*idTokenCustomClai
 
 	return claims, nil
 }
+
+// validateRefreshToken 验证 refreshToken
+func validateRefreshToken(tokenString string, key string) (*refreshTokenCustomClaims, error) {
+	claims := &refreshTokenCustomClaims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
+		return []byte(key), nil
+	})
+
+	// 现在我们只返回错误并处理服务级别的登录
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("Refresh token is invalid")
+	}
+
+	claims, ok := token.Claims.(*refreshTokenCustomClaims)
+	if !ok {
+		return nil, fmt.Errorf("Refresh token valid but couldn't parse claims")
+	}
+
+	return claims, nil
+}
