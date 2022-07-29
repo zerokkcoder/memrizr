@@ -48,14 +48,14 @@ func (s *tokenService) NewTokenPairFromUser(ctx context.Context, u *model.User, 
 		return nil, apperrors.NewInternal()
 	}
 
-	refreshToken, err := generateRefreshToken(u.UID, s.RefreshSecret, s.RefreshExpirationSecs)
+	refreshTokenData, err := generateRefreshToken(u.UID, s.RefreshSecret, s.RefreshExpirationSecs)
 	if err != nil {
 		log.Printf("Error generateing refreshToken for uid: %v. Error: %v\n", u.UID, err.Error())
 		return nil, apperrors.NewInternal()
 	}
 
 	// 保存 refresh token
-	if err := s.TokenRepository.SetRefreshToken(ctx, u.UID.String(), refreshToken.ID, refreshToken.ExpiresIn); err != nil {
+	if err := s.TokenRepository.SetRefreshToken(ctx, u.UID.String(), refreshTokenData.ID.String(), refreshTokenData.ExpiresIn); err != nil {
 		log.Printf("Error storing tokenID for uid: %v. Error: %v\n", u.UID, err.Error())
 		return nil, apperrors.NewInternal()
 	}
@@ -67,8 +67,8 @@ func (s *tokenService) NewTokenPairFromUser(ctx context.Context, u *model.User, 
 	}
 
 	return &model.TokenPair{
-		IDToken:      idToken,
-		RefreshToken: refreshToken.SS,
+		IDToken:      model.IDToken{SS: idToken},
+		RefreshToken: model.RefreshToken{SS: refreshTokenData.SS, ID: refreshTokenData.ID, UID: u.UID},
 	}, nil
 }
 

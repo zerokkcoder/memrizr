@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// IDTokenCustomClaims 自定义jwt claims
-type IDTokenCustomClaims struct {
+// idTokenCustomClaims 自定义jwt claims
+type idTokenCustomClaims struct {
 	User *model.User `json:"user"`
 	jwt.StandardClaims
 }
@@ -22,7 +22,7 @@ func generateIDToken(u *model.User, key *rsa.PrivateKey, exp int64) (string, err
 	unixTime := time.Now().Unix()
 	tokenExp := unixTime + exp
 
-	claims := IDTokenCustomClaims{
+	claims := idTokenCustomClaims{
 		User: u,
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  unixTime,
@@ -40,21 +40,21 @@ func generateIDToken(u *model.User, key *rsa.PrivateKey, exp int64) (string, err
 	return ss, nil
 }
 
-// RefreshToken 刷新Token 结构体
-type RefreshToken struct {
+// refreshTokenData 刷新Token 结构体
+type refreshTokenData struct {
 	SS        string
-	ID        string
+	ID        uuid.UUID
 	ExpiresIn time.Duration
 }
 
-// RefreshTokenCustomClaims 刷新token的自定义jwt claims
-type RefreshTokenCustomClaims struct {
+// refreshTokenCustomClaims 刷新token的自定义jwt claims
+type refreshTokenCustomClaims struct {
 	UID uuid.UUID `json:"uid"`
 	jwt.StandardClaims
 }
 
 // 生成刷新token
-func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*RefreshToken, error) {
+func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*refreshTokenData, error) {
 	currentTime := time.Now()
 	tokenExp := currentTime.Add(time.Duration(exp) * time.Second)
 	tokenID, err := uuid.NewRandom()
@@ -64,7 +64,7 @@ func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*RefreshToken, 
 		return nil, err
 	}
 
-	claims := RefreshTokenCustomClaims{
+	claims := refreshTokenCustomClaims{
 		UID: uid,
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  currentTime.Unix(),
@@ -80,16 +80,16 @@ func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*RefreshToken, 
 		return nil, err
 	}
 
-	return &RefreshToken{
+	return &refreshTokenData{
 		SS:        ss,
-		ID:        tokenID.String(),
+		ID:        tokenID,
 		ExpiresIn: tokenExp.Sub(currentTime),
 	}, nil
 }
 
 // validateIDToken 验证 token
-func validateIDToken(tokenString string, key *rsa.PublicKey) (*IDTokenCustomClaims, error) {
-	claims := &IDTokenCustomClaims{}
+func validateIDToken(tokenString string, key *rsa.PublicKey) (*idTokenCustomClaims, error) {
+	claims := &idTokenCustomClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
 		return key, nil
@@ -104,7 +104,7 @@ func validateIDToken(tokenString string, key *rsa.PublicKey) (*IDTokenCustomClai
 		return nil, fmt.Errorf("ID token is invalid")
 	}
 
-	claims, ok := token.Claims.(*IDTokenCustomClaims)
+	claims, ok := token.Claims.(*idTokenCustomClaims)
 	if !ok {
 		return nil, fmt.Errorf("ID token valid but couldn't parse claims")
 	}

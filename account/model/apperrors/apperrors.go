@@ -25,7 +25,7 @@ const (
 // 这有助于从API端点返回一致的错误类型/消息
 type Error struct {
 	Type    Type   `json:"type"`
-	Message string `json:message`
+	Message string `json:"message"`
 }
 
 // Error 实现标准的错误接口，我们可以从这个包返回一个普通的旧的 go _error_ 错误
