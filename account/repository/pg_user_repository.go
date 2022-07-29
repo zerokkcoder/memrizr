@@ -29,8 +29,22 @@ func (r *pgUserRepository) FindByID(ctx context.Context, uid uuid.UUID) (*model.
 
 	query := "SELECT * FROM users WHERE uid=$1"
 
-	if err := r.DB.Get(user, query, uid); err != nil {
+	if err := r.DB.GetContext(ctx, user, query, uid); err != nil {
 		return user, apperrors.NewNotFound("uid", uid.String())
+	}
+
+	return user, nil
+}
+
+// FindByEmail 通过 Email 查找用户
+func (r *pgUserRepository) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+	user := &model.User{}
+
+	query := "SELECT * FROM users WHERE email=$1"
+
+	if err := r.DB.GetContext(ctx, user, query, email); err != nil {
+		log.Printf("Unable to get user with email address: %v. Err: %v\n", email, err)
+		return user, apperrors.NewNotFound("email", email)
 	}
 
 	return user, nil

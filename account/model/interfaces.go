@@ -18,6 +18,7 @@ type UserService interface {
 type UserRepository interface {
 	FindByID(ctx context.Context, uid uuid.UUID) (*User, error)
 	Create(ctx context.Context, u *User) error
+	FindByEmail(ctx context.Context, email string) (*User, error)
 }
 
 // TokenService Token服务接口
