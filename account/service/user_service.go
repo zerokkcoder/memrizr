@@ -66,3 +66,13 @@ func (s *userService) Signin(ctx context.Context, u *model.User) error {
 	*u = *uFetched
 	return nil
 }
+
+// UpdateDetails 实现 UserService 接口 UpdateDetails 方法
+func (s *userService) UpdateDetails(ctx context.Context, u *model.User) error {
+	err := s.UserRepository.Update(ctx, u)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
