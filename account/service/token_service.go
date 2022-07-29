@@ -71,3 +71,13 @@ func (s *tokenService) NewTokenPairFromUser(ctx context.Context, u *model.User, 
 		RefreshToken: refreshToken.SS,
 	}, nil
 }
+
+// ValidateIDToken 验证 token
+func (s *tokenService) ValidateIDToken(tokenString string) (*model.User, error) {
+	claims, err := validateIDToken(tokenString, s.PublicKey)
+	if err != nil {
+		log.Printf("Unable to validate or parse idToken - Error: %v\n", err)
+		return nil, apperrors.NewAuthorization("Unable to verify user from idToken")
+	}
+	return claims.User, nil
+}

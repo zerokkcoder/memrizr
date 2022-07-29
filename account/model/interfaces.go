@@ -24,6 +24,7 @@ type UserRepository interface {
 // TokenService Token服务接口
 type TokenService interface {
 	NewTokenPairFromUser(ctx context.Context, u *User, prevIDToken string) (*TokenPair, error)
+	ValidateIDToken(tokenString string) (*User, error)
 }
 
 // TokenRepository Token存储接口

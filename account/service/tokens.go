@@ -2,6 +2,7 @@ package service
 
 import (
 	"crypto/rsa"
+	"fmt"
 	"log"
 	"memrizr/model"
 	"time"
@@ -84,4 +85,29 @@ func generateRefreshToken(uid uuid.UUID, key string, exp int64) (*RefreshToken, 
 		ID:        tokenID.String(),
 		ExpiresIn: tokenExp.Sub(currentTime),
 	}, nil
+}
+
+// validateIDToken 验证 token
+func validateIDToken(tokenString string, key *rsa.PublicKey) (*IDTokenCustomClaims, error) {
+	claims := &IDTokenCustomClaims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
+		return key, nil
+	})
+
+	// 现在我们只返回错误并处理服务级别的登录
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("ID token is invalid")
+	}
+
+	claims, ok := token.Claims.(*IDTokenCustomClaims)
+	if !ok {
+		return nil, fmt.Errorf("ID token valid but couldn't parse claims")
+	}
+
+	return claims, nil
 }

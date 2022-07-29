@@ -55,3 +55,4 @@ $ make migrate-force VERSION=number
 - [13-Gin 超时处理中间件](https://dev.to/jacobsngoodwin/13-gin-handler-timeout-middleware-4bhg)
 - [14-添加 Signin 登录路由处理器](https://dev.to/jacobsngoodwin/14-add-signin-handler-32be)
 - [15-服务层、存储层实现 Signin](https://dev.to/jacobsngoodwin/15-add-signin-to-service-and-repository-layers-5mg)
+- [16-创建获取授权用户中间件](https://dev.to/jacobsngoodwin/16-create-gin-middleware-to-extract-authorized-user-1jom)
