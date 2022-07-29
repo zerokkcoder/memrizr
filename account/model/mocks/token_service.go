@@ -8,12 +8,12 @@ import (
 )
 
 // MockTokenSerive 模拟Token服务
-type MockTokenSerive struct {
+type MockTokenService struct {
 	mock.Mock
 }
 
 // NewTokenPairFromUser 模拟生成token
-func (m *MockTokenSerive) NewTokenPairFromUser(ctx context.Context, u *model.User, prevIDToken string) (*model.TokenPair, error) {
+func (m *MockTokenService) NewTokenPairFromUser(ctx context.Context, u *model.User, prevIDToken string) (*model.TokenPair, error) {
 	ret := m.Called(ctx, u, prevIDToken)
 
 	var r0 *model.TokenPair

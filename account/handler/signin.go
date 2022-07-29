@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// signupReq 注册请求结构体
-type signupReq struct {
+// signinReq 登录请求结构体
+type signinReq struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,gte=6,lte=30"`
 }
 
-// Signup 注册
-func (h *Handler) Signup(c *gin.Context) {
-	var req signupReq
+// Signin 登录
+func (h *Handler) Signin(c *gin.Context) {
+	var req signinReq
 
 	// 检验请求数据
 	if ok := bindData(c, &req); !ok {
@@ -30,10 +30,9 @@ func (h *Handler) Signup(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	err := h.UserService.Signup(ctx, u)
-
+	err := h.UserService.Signin(ctx, u)
 	if err != nil {
-		log.Printf("Faild to sign up user: %v\n", err.Error())
+		log.Printf("Failed to sign in user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})
@@ -42,9 +41,8 @@ func (h *Handler) Signup(c *gin.Context) {
 
 	// 创建 token pair 并转化为字符串
 	tokens, err := h.TokenService.NewTokenPairFromUser(ctx, u, "")
-
 	if err != nil {
-		log.Printf("Faild to create tokens for user: %v\n", err.Error())
+		log.Printf("Failed to create tokens for user: %v\n", err.Error())
 
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,

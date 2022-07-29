@@ -46,3 +46,8 @@ func (s *userService) Signup(ctx context.Context, u *model.User) error {
 
 	return nil
 }
+
+// Signin 实现 UserService 接口 Signin 方法
+func (s *userService) Signin(ctx context.Context, u *model.User) error {
+	panic("Not implemented")
+}

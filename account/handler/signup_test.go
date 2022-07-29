@@ -211,7 +211,7 @@ func TestSignup(t *testing.T) {
 		}
 
 		mockUserService := new(mocks.MockUserService)
-		mockTokenService := new(mocks.MockTokenSerive)
+		mockTokenService := new(mocks.MockTokenService)
 		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).Return(nil)
 		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*context.emptyCtx"), u, "").Return(mockTokenResp, nil)
 
@@ -264,7 +264,7 @@ func TestSignup(t *testing.T) {
 		mockErrorResponse := apperrors.NewInternal()
 
 		mockUserService := new(mocks.MockUserService)
-		mockTokenService := new(mocks.MockTokenSerive)
+		mockTokenService := new(mocks.MockTokenService)
 		mockUserService.On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).Return(nil)
 		mockTokenService.On("NewTokenPairFromUser", mock.AnythingOfType("*context.emptyCtx"), u, "").Return(nil, mockErrorResponse)
 

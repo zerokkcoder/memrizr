@@ -57,13 +57,6 @@ func NewHandler(c *Config) {
 	})
 }
 
-func (h *Handler) Signin(c *gin.Context) {
-	time.Sleep(2 * time.Second)
-	c.JSON(http.StatusOK, gin.H{
-		"hello": "it's me",
-	})
-}
-
 func (h *Handler) Signout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"hello": "it's me",
