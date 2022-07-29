@@ -4,6 +4,7 @@ import (
 	"context"
 	"memrizr/model"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -61,4 +62,16 @@ func (m *MockTokenService) ValidateRefreshToken(refreshTokenString string) (*mod
 	}
 
 	return r0, r1
+}
+
+// Signout 模拟用户退出
+func (m *MockTokenService) Signout(ctx context.Context, uid uuid.UUID) error {
+	ret := m.Called(ctx, uid)
+
+	var r0 error
+	if ret.Get(0) != nil {
+		r0 = ret.Get(0).(error)
+	}
+
+	return r0
 }

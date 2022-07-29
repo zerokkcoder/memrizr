@@ -100,3 +100,7 @@ func (s *tokenService) ValidateRefreshToken(tokenString string) (*model.RefreshT
 	}
 	return &model.RefreshToken{ID: tokenUUID, UID: claims.UID, SS: tokenString}, nil
 }
+
+func (s *tokenService) Signout(ctx context.Context, uid uuid.UUID) error {
+	return s.TokenRepository.DeleteUserRefreshTokens(ctx, uid.String())
+}
